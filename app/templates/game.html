@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Frage: {{ question.question }}</h2>
+
+    <div class="picturecontainer">
+        {% if question.HasImage %}
+            <div class="formcontainer">
+                <img src="{{ question.image_path.replace('\\', '/') }}" alt="Bild" class="question-image">
+            </div>
+        {% endif %}
+    </div>
+    
+    <div id="answerContainer" style="visibility: hidden;">
+        <h2>Antwort: {{ question.answer }}</h2>
+    </div> 
+
+    <form id="next" action="{{ url_for('game.load_next_question') }}" method="POST">
+        <div class="container">
+            <div class="btn" id="blue" onclick="revealAnswer()"><a href="#">show answer</a></div> 
+            <div class="btn" id="green" onclick="submitnextForm()"><a href="#">next question</a></div>
+            <div class="btn" id="red"><a href="/menu">back to menu</a></div>
+        </div>
+    </form>
+
+    {% if players %}
+    <div class="formcontainer" id="playersContainer">
+        <div class="form">
+            <ul id="playersList" class="players-list-vertical">
+                {% for player in players %}
+                <li class="player-box {% if player.index == current_player_index %}active{% endif %}" id="player{{ loop.index0 }}" data-index="{{ loop.index }}">
+                    <span>{{ player.name }}</span>
+                    {% for i in range(player.lives) %}
+                        <span class="heart" data-index="{{ player.index }}" data-heart-index="{{ i }}" onclick="removeHeart(this)">❤️</span>
+                    {% endfor %}
+                    <span style="display: {% if player.lives != 0 %}none{% endif %};">💀</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+
+    <script>
+        function revealAnswer() {
+            document.getElementById('answerContainer').style.visibility = 'visible';
+        }
+
+        function submitnextForm() {
+            document.getElementById("next").submit();
+        }
+
+        function removeHeart(element) {
+            const playerIndex = element.getAttribute('data-index');
+            const heartIndex = element.getAttribute('data-heart-index');
+
+            fetch(`/remove_heart/${playerIndex}`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the UI to reflect the removed heart
+                    element.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

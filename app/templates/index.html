@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Document</title>
+</head>
+<body>
+    <div class="formcontainer">
+        <div class="form">
+            <h2>Login Der Dümmste fliegt</h2>
+            <form id="login" action="/login" method="post">
+                <div class="inputBox">
+                    <input type="text" id="username" name="username" placeholder="Username">
+                </div>
+
+                <div class="inputBox">
+                    <input type="password" id="password" name="password" placeholder="Password">
+                </div>
+
+                <div class="container">
+                    <div class="btn" id="green" onclick="submitForm()"><a href="#">login</a></div>
+                </div>
+            </form>
+        </div>
+
+        <script>
+            function submitForm() {
+                // Get the password input
+                var passwordField = document.getElementById("password");
+
+                // Hash the password using SHA-256
+                var hashedPassword = CryptoJS.SHA256(passwordField.value).toString();
+
+                // Replace the password field value with the hashed password
+                passwordField.value = hashedPassword;
+
+                // Submit the form
+                document.getElementById("login").submit();
+            }
+        </script>
+</body>
+</html>

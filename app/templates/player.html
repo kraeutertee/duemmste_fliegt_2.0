@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Add Player</title>
+</head>
+<body>
+
+    <div class="formcontainer">
+        <div class="form">
+
+            <h2>Add a Player</h2>
+
+            <form id="login" action="/add_player" method="post">
+
+                <div class="inputBox">
+                    <input type="text" id="username" name="player_name" placeholder="Playername">
+                </div>
+
+                <div class="inputBox">
+                    <input type="number" id="username" name="num_lives" placeholder="Player life" min="1" value="3">
+                </div>
+
+            </form>
+
+            <div class="container">
+
+                <div class="btn" id="green" onclick="submitForm()"><a href="#">add</a></div>
+                
+                <div class="btn" id="red"><a href="/menu">back to Menu</a></div>
+            
+            </div>
+            
+        </div>
+    </div>
+    <br>
+    <div class="formcontainer" id="player">
+        <div class="form">
+            <ul id="playersList">
+                {% for player in players %}
+                <li class="player-box" draggable="true" ondragstart="drag(event)" id="player{{ loop.index }}" data-index="{{ loop.index }}">
+                    <span>{{ player.name }}</span>
+                        {% for i in range(player.lives) %}
+                            <span class="heart">❤️</span>
+                        {% endfor %}
+                    <a href="/delete_player/{{ loop.index0 }}" style="text-decoration: none;">
+                        <img class="delete-icon" src="static/icons/trashcan_icon.png" alt="Delete">
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function submitForm() {
+            document.getElementById("login").submit();
+        }
+    </script>
+
+</body>
+</html>

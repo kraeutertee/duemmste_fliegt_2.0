@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Select Question</title>
+</head>
+<body>
+    <div class="forms-wrapper">
+        <div class="formcontainer">
+            <div class="form">
+                <h2>Select a Question-set</h2>
+                <form id="select" action="/select_question_set" method="post">
+                    <div class="inputBox">
+                        <select id="username" name="selected_question_set">
+                            {% for file in userfiles %}
+                            <option value="{{ file }}">{{ file }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="container">
+                        <div class="btn" id="green" onclick="submitselectForm()"><a href="#">select</a></div>
+                        <div class="btn" id="blue" onclick="flipForm()"><a href="#">create new set</a></div>
+                        <div class="btn" id="red"><a href="/menu">back to Menu</a></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="formcontainer" style="display: none;">
+            <div class="form">
+                <h2>Create a Question-set</h2>
+                <form id="create" action="/create_question_set" method="post">
+                    <div class="inputBox">
+                        <input type="text" id="file_name" name="file_name" placeholder="Question-set name">
+                    </div>
+
+                    <div class="container"> 
+                        <div class="btn" id="green" onclick="submitcreateForm()"><a href="#">create</a></div>
+                        <div class="btn" id="blue" onclick="flipForm()"><a href="#">select existing set</a></div>
+                        <div class="btn" id="red"><a href="/menu">back to Menu</a></div>
+                    </div>   
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function submitselectForm() {
+            document.getElementById("select").submit();
+        }
+
+        function submitcreateForm() {
+            document.getElementById("create").submit();
+        }
+
+        function flipForm() {
+            var forms = document.getElementsByClassName('formcontainer');
+            for (var i = 0; i < forms.length; i++) {
+                if (forms[i].style.display === "none") {
+                    forms[i].style.display = "flex";
+                } else {
+                    forms[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
