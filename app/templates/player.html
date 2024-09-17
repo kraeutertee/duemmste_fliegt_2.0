@@ -14,7 +14,7 @@
 
             <h2>Add a Player</h2>
 
-            <form id="login" action="/add_player" method="post">
+            <form id="login" action="{{ url_for('player.add_player') }}" method="post">
 
                 <div class="inputBox">
                     <input type="text" id="username" name="player_name" placeholder="Playername">
@@ -46,7 +46,7 @@
                         {% for i in range(player.lives) %}
                             <span class="heart">❤️</span>
                         {% endfor %}
-                    <a href="/delete_player/{{ loop.index0 }}" style="text-decoration: none;">
+                        <a href="{{ url_for('player.delete_player', index=loop.index0) }}" style="text-decoration: none;">
                         <img class="delete-icon" src="static/icons/trashcan_icon.png" alt="Delete">
                     </a>
                 </li>

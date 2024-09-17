@@ -29,15 +29,6 @@
 
         <script>
             function submitForm() {
-                // Get the password input
-                var passwordField = document.getElementById("password");
-
-                // Hash the password using SHA-256
-                var hashedPassword = CryptoJS.SHA256(passwordField.value).toString();
-
-                // Replace the password field value with the hashed password
-                passwordField.value = hashedPassword;
-
                 // Submit the form
                 document.getElementById("login").submit();
             }

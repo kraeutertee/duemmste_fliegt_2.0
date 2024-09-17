@@ -10,8 +10,8 @@
 <body>
     <h1>Select a Question-set</h1>
     <div class="scroll-box">
-        <form id="questionForm" action="/game_question_select" method="post">
-            <select name="selected_question_set">
+        <form id="questionForm" action="{{ url_for('nav.show_game') }}" method="post">
+            <select name="selected_game_set">
                 {% for file in userfiles %}
                 <option value="{{ file }}">{{ file }}</option>
                 {% endfor %}

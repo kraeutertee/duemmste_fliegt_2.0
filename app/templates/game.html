@@ -21,7 +21,7 @@
         <h2>Antwort: {{ question.answer }}</h2>
     </div> 
 
-    <form id="next" action="{{ url_for('game.load_next_question') }}" method="POST">
+    <form id="next" action="{{ url_for('game.load_next_question_call') }}" method="POST">
         <div class="container">
             <div class="btn" id="blue" onclick="revealAnswer()"><a href="#">show answer</a></div> 
             <div class="btn" id="green" onclick="submitnextForm()"><a href="#">next question</a></div>

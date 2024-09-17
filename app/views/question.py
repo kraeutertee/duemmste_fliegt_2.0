@@ -4,8 +4,8 @@ from app import data_access
 
 question_bp = Blueprint('question', __name__)
 
-@question_bp.route('/question_editor_select')
-def show_questionselect_page():
+@question_bp.route('/editor_select')
+def show_editor_select():
     try:
         username = session.get('username', None)
         userfiles = []
@@ -17,3 +17,7 @@ def show_questionselect_page():
         app.logger.error(f"Error loading question selection page: {str(e)}")
         flash(f"Error loading question selection page: {str(e)}", "danger")
         return redirect('/menu')
+    
+@question_bp.route('/editor')
+def show_editor():
+    return render_template('editor.html')

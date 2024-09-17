@@ -11,12 +11,11 @@
 <body>
     <h1>Welcome, {{ username }}</h1>
 
-
     <div class="container">
-		<div class="btn" id="green"><a href="/game">start game</a></div>
-        <div class="btn" id="blue"><a href="/player">player</a></div>
-        <div class="btn" id="blue"><a href="/questionselect">questions</a></div>
-        <div class="btn" id="red"><a href="/">Logout</a></div>
+		<div class="btn" id="green"><a href="{{ url_for('nav.show_game_opt') }}">start game</a></div>
+        <div class="btn" id="blue"><a href="{{ url_for('nav.show_player') }}">player</a></div>
+        <div class="btn" id="blue"><a href="{{ url_for('nav.show_editor_select') }}">questions</a></div>
+        <div class="btn" id="red"><a href="{{ url_for('nav.show_index') }}">Logout</a></div>
     </div>
 </body>
 </html>
