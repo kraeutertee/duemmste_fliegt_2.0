@@ -98,7 +98,7 @@ def show_game():
             session['current_question_index'] = 0
         session['game_set'] = request.form['selected_game_set']
 
-        current_app.logger.info(f"Question set '{session.get('loaded_game_set')}' loaded for user: {session.get('username')}")
+        current_app.logger.info(f"Question set '{session.get('game_set')}' loaded for user: {session.get('username')}")
         
         # Attempt to render the game page
         return render_template('game.html', question = game.load_next_question(), players = session.get('players', []))
