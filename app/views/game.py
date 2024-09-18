@@ -40,3 +40,4 @@ def load_next_question():
 def load_next_question_call():
     player.update_current_player_index()
     return render_template('game.html', question = load_next_question(), players = session.get('players', []), current_player_index = session.get('current_player_index', 0))
+

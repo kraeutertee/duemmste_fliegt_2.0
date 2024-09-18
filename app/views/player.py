@@ -61,17 +61,14 @@ def update_current_player_index():
         if num_players == 0:
             return
 
-        for _ in range(num_players):
-            if 0 <= session.get('current_player_index') < num_players - 1:
-                session['current_player_index'] += 1
-            else:
-                session['current_player_index'] = 0
+        current_index = session.get('current_player_index', 0)
+        next_index = (current_index + 1) % num_players
 
-            if players[session.get('current_player_index')]['lives'] > 0:
-                current_app.logger.info(f"Player index updated to {session.get('current_player_index')}.")
-                return
+        while players[next_index]['lives'] == 0:
+            next_index = (next_index + 1) % num_players
 
-        session['current_player_index'] = 0
+        session['current_player_index'] = next_index
+        current_app.logger.info(f"Player index updated to {next_index}.")
     except Exception as e:
         current_app.logger.error(f"Error updating current player index: {str(e)}")
         flash(f"Error updating current player index: {str(e)}", "danger")
