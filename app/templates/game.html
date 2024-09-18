@@ -39,7 +39,7 @@
                     {% for i in range(player.lives) %}
                         <span class="heart" data-index="{{ player.index }}" data-heart-index="{{ i }}" onclick="removeHeart(this)">❤️</span>
                     {% endfor %}
-                    <span style="display: {% if player.lives != 0 %}none{% endif %};">💀</span>
+                    <span id="skull{{ player.index }}" style="display: {% if player.lives != 0 %}none{% endif %};">💀</span>
                 </li>
                 {% endfor %}
             </ul>
@@ -57,19 +57,25 @@
         }
 
         function removeHeart(element) {
-            const playerIndex = element.getAttribute('data-index');
-            const heartIndex = element.getAttribute('data-heart-index');
+        const playerIndex = element.getAttribute('data-index');
+        const heartIndex = element.getAttribute('data-heart-index');
 
-            fetch(`/remove_heart/${playerIndex}`, {
-                method: 'POST'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Update the UI to reflect the removed heart
-                    element.style.display = 'none';
+        fetch(`/player/remove_heart/${playerIndex}`, {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update the UI to reflect the removed heart
+                element.style.display = 'none';
+
+                // Check if the player's lives are now 0
+                if (data.player.lives === 0) {
+                    // Reveal the skull for this player
+                    document.getElementById(`skull${playerIndex}`).style.display = 'inline';
                 }
-            });
+            }
+        });
         }
     </script>
 </body>

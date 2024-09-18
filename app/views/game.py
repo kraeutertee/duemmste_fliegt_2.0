@@ -3,6 +3,7 @@ import pandas as pd
 from flask import Blueprint, current_app, flash, render_template, request, redirect, session, url_for
 
 from app import data_access
+from app.views import player
 
 game_bp = Blueprint('game', __name__)
 
@@ -37,4 +38,5 @@ def load_next_question():
     
 @game_bp.route('/load_next_question_call', methods=['POST'])
 def load_next_question_call():
-    return render_template('game.html', question = load_next_question(), players = session.get('players', []))
+    player.update_current_player_index()
+    return render_template('game.html', question = load_next_question(), players = session.get('players', []), current_player_index = session.get('current_player_index', 0))
