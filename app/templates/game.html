@@ -12,7 +12,7 @@
     <div class="picturecontainer">
         {% if question.HasImage %}
             <div class="formcontainer">
-                <img src="{{ question.image_path.replace('\\', '/') }}" alt="Bild" class="question-image">
+                <img src="{{ question.image_path.replace('\\', '/') }}" alt="Bild" class="question-image"> <!-- wenn ERROR: Error during loading the next question call: 'numpy.float64 object' has no attribute 'replace', wird False in der CSV als String erkannt, weil ein Leerzeichen davor ist-->
             </div>
         {% endif %}
     </div>

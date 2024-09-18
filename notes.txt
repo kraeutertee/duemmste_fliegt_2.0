@@ -1,0 +1,5 @@
+Implementierung dass wenn im finalmodus (final_mode_active) True, keine Herzen mehr angezeigt werden, sondern eine Krone, die Skulls sollen bleiben. wenn man auf eine Krone drückt soll dieser Spieler zum Gewinner ernannt werden und damit das Spiel und alle Variablen zurückgesetzt werden
+
+bereinigen von unnötigen debugging loggern in game.load_next_question
+
+man könntre überlegen ob man eine Statistik einführt wer wieviele Games gewonnen hat, leben plotten über die Zeit, bisschen Datenanalyse betreiben

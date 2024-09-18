@@ -29,6 +29,9 @@ def login():
         session['current_player_index'] = 0
         session['editor_set'] = ''
         session['game_set'] = ''
+        session['final_mode'] = True
+        session['final_mode_active'] = False
+        session['final_mode_init'] = False # zukünftig auf False setzen, wenn Sieger bestimmt wird
         session['players'] = []
 
         return redirect('/menu')
