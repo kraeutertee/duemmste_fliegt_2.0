@@ -33,6 +33,7 @@ def login():
         session['final_mode_active'] = False
         session['final_mode_init'] = False # zukünftig auf False setzen, wenn Sieger bestimmt wird
         session['players'] = []
+        session['timer_default'] = 30
 
         return redirect('/menu')
 
@@ -104,7 +105,7 @@ def show_game():
         current_app.logger.info(f"Question set '{session.get('game_set')}' loaded for user: {session.get('username')}")
         
         # Attempt to render the game page
-        return render_template('game.html', question = game.load_next_question(), players = session.get('players', []), current_player_index = session.get('current_player_index', 0))
+        return render_template('game.html', question = game.load_next_question(), players = session.get('players', []), current_player_index = session.get('current_player_index', 0), timer = 30)
     except Exception as e:
         # Log the error and notify the user
         current_app.logger.error(f"Error loading show_game: {str(e)}")

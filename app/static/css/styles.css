@@ -337,3 +337,41 @@ ainer takes up the space it needs */
     align-items: flex-end; /* Richtet die Liste rechtsbündig aus */
     gap: 10px; /* Abstand zwischen den Spielern */
 }
+
+/* Style the timer in the upper left corner */
+/* Add this CSS to your styles.css or within a <style> tag */
+/* Timer Styling */
+#timer {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+/* Button Styling */
+.btn {
+    padding: 10px 20px;
+    background-color: #007BFF; /* Example color */
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    margin: 5px;
+    display: inline-block;
+    transition: opacity 0.3s ease;
+}
+
+/* Disabled Button Styling */
+.btn.disabled {
+    /* Additional styling can be added here if needed */
+}
+
+/* Optional: Hover Effect for Enabled Buttons */
+.btn:not(.disabled):hover {
+    background-color: #0056b3; /* Darker shade */
+}

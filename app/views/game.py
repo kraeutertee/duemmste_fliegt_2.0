@@ -95,12 +95,22 @@ def load_next_question():
 @game_bp.route('/load_next_question_call', methods=['POST'])
 def load_next_question_call():
     try:
+
+        # Retrieve remaining time from form or session
+        remaining_time = int(request.form.get('remaining_time', session.get('timer', 30)))
+
+        # Decrease the timer by 1 but ensure it doesn't go below 0
+        session['timer'] = max(remaining_time - 1, 0)
+        
         # Only update the player index if not in final mode
         if not session.get('final_mode_active', False):
             player.update_current_player_index()
 
+        if session.get('timer') == 0:
+            session['timer'] = session.get('timer_default', 30)
+
         # Render the game template with the loaded question and players
-        return render_template('game.html', question=load_next_question(), players=session.get('players', []), current_player_index=session.get('current_player_index', 0))
+        return render_template('game.html', question=load_next_question(), players=session.get('players', []), current_player_index=session.get('current_player_index', 0), timer=session.get('timer', 30))
 
     except Exception as e:
         # Log any exceptions while calling the load next question function
