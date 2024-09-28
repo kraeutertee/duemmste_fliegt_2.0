@@ -106,6 +106,9 @@ def load_next_question_call():
         if not session.get('final_mode_active', False):
             player.update_current_player_index()
 
+        else:
+            return render_template('final.html', question=load_next_question(), players=session.get('players', []), current_player_index=session.get('current_player_index', 0))
+
         if session.get('timer') == 0:
             session['timer'] = session.get('timer_default', 30)
 

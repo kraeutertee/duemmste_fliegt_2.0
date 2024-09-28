@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Document</title>
+</head>
+<body>
+
+    <h2>Frage: {{ question.question }}</h2>
+
+    <div class="picturecontainer">
+        {% if question.HasImage %}
+            <div class="formcontainer">
+                <img src="{{ question.image_path.replace('\\', '/') }}" alt="Bild" class="question-image">
+                <!-- Kommentar: Fehlerbehebung für Bildpfad -->
+            </div>
+        {% endif %}
+    </div>
+    
+    <div id="answerContainer" style="visibility: hidden;">
+        <h2>Antwort: {{ question.answer }}</h2>
+    </div> 
+
+    <!-- Updated Form with Correct Button ID -->
+    <form id="next" action="{{ url_for('game.load_next_question_call') }}" method="POST">
+        <div class="container">
+            <div class="btn" id="blue" onclick="revealAnswer()"><a href="javascript:void(0);">show answer</a></div> 
+            <!-- Updated ID to 'green' and initial state based on timer -->
+            <div class="btn disabled" id="green" onclick="submitNextForm()"><a href="javascript:void(0);">next question</a></div>
+            <div class="btn" id="red"><a href="/menu">back to menu</a></div>
+        </div>
+    </form>
+
+    {% if players %}
+    <div class="formcontainer" id="playersContainer">
+        <div class="form">
+            <ul id="playersList" class="players-list-vertical">
+                {% for player in players %}
+                <li class="player-box {% if player.index == current_player_index %}active{% endif %}" id="player{{ loop.index0 }}" data-index="{{ loop.index }}">
+                    <span>{{ player.name }}</span>
+                    {% if player.lives > 0 %}
+                        <span class="crown" player-name="{{ player.name }}" onclick="winner(this)">👑</span> <!-- Display one crown if the player has lives left -->
+                    {% endif %}
+                    <span id="skull{{ player.index }}" style="display: {% if player.lives != 0 %}none{% endif %};">💀</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+
+    <script>
+        
+        // Function to reveal the answer
+        function revealAnswer() {
+            document.getElementById('answerContainer').style.visibility = 'visible';
+        }
+
+        // Function to submit the next form
+        function submitNextForm() {
+            document.getElementById("next").submit();
+        }
+
+        function winner(element) {
+            const playerName = element.getAttribute('player-name');
+
+            fetch(`/winner/${playerName}`, {
+                method: 'POST'
+            }).then(response => {
+                if (response.ok) {
+                    // Redirect to the winner page
+                    window.location.href = `/winner/${playerName}`;
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <h2>Herzlichen Glückwunsch,</h2>
+    <h1>{{ player }}</h1>
+    <br>
+    <h2>du hast das Spiel gewonnen!</h2>
+
+    <!-- Updated Form with Correct Button ID -->
+    <form id="next">
+        <div class="container">
+            <div class="btn" id="red"><a href="/menu">back to menu</a></div>
+        </div>
+    </form>
+
+    <script>
+        // Trigger confetti spray when the page loads
+        window.onload = function() {
+            // Duration for confetti to appear on the screen
+            var duration = 5 * 1000; // Confetti lasts for 5 seconds
+            var animationEnd = Date.now() + duration;
+
+            // Central confetti burst from random positions (continuous)
+            var confettiInterval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(confettiInterval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                confetti({
+                    particleCount: particleCount,
+                    startVelocity: 40,    // Increased velocity for central spray
+                    spread: 360,
+                    origin: { x: Math.random(), y: Math.random() - 0.2 },
+                    decay: 0.95           // Particles stay longer on screen
+                });
+            }, 250); // Confetti bursts every 250ms for 5 seconds
+
+            // Confetti spray from the bottom corners (trigger only once)
+            confetti({
+                particleCount: 150,      // More particles for bigger effect
+                startVelocity: 100,       // Higher velocity for further reach
+                spread: 50,              // Wider spread to cover more area
+                origin: { x: 0, y: 1 },  // Bottom-left corner
+                decay: 0.9,              // Slow decay for longer duration
+                scalar: 1.2              // Larger particles for visibility
+            });
+
+            confetti({
+                particleCount: 150,
+                startVelocity: 100,
+                spread: 50,
+                origin: { x: 1, y: 1 },  // Bottom-right corner
+                decay: 0.9,
+                scalar: 1.2
+            });
+        };
+    </script>
+</body>
+</html>

@@ -122,3 +122,8 @@ def show_player():
         current_app.logger.error(f"Error loading player page: {str(e)}")
         flash(f"Error loading player page: {str(e)}", "danger")
         return redirect('/menu')
+    
+@nav_bp.route('/winner/<string:player_name>', methods=['GET', 'POST'])
+def winner(player_name):
+    current_app.logger.info(f"Winner page accessed for player: {player_name}")
+    return render_template('winner.html', player=player_name)
