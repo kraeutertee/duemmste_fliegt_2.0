@@ -82,6 +82,15 @@ def show_editor_select():
         current_app.logger.error(f"Error loading editor_select: {str(e)}")
         flash(f"Error rendering editor_select page: {str(e)}", "danger")
         return redirect('/')
+    
+@nav_bp.route('/editor', methods=['POST'])
+def show_editor():
+    session['editor_set'] = os.path.join(data_access.get_questions_folder(), request.form['editor_set'])
+    return render_template('editor.html')
+
+def show_editor(editor_set):
+    session['editor_set'] = os.path.join(data_access.get_questions_folder(), editor_set)
+    return render_template('editor.html')
 
 @nav_bp.route('/game_opt')
 def show_game_opt():

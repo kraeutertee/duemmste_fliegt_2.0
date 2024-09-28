@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Add Question</title>
+</head>
+<body>
+    <div class="formcontainer">
+        <div class="form">
+            <form id="add" action="{{ url_for('question.save_question') }}" method="POST" enctype="multipart/form-data">
+                <h2>Add a Question</h2>
+                <label for="question">Frage:</label><br>
+                <div class="inputBox">
+                    <input type="text" id="username" name="question" placeholder="Question" required><br><br>
+                </div>
+                <label for="answer">Antwort:</label><br>
+                <div class="inputBox">
+                    <input type="text" id="username" name="answer" placeholder="Answer" required><br><br>
+                </div>
+                <label for="image">Bild hochladen:</label><br>
+                <input type="file" id="image" name="image"><br><br>
+                <div class="container">
+                    <div class="btn" id="green" onclick="submitaddForm()"><a href="#">add</a></div>
+                    <div class="btn" id="red"><a href="{{ url_for('nav.show_editor_select') }}">back to Selection</a></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+<script>
+    function submitaddForm() {
+        document.getElementById("add").submit();
+    }
+</script>
+</html>
