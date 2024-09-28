@@ -2,10 +2,12 @@
 import os
 import secrets
 import logging
-from flask import Flask
+from flask import Flask, send_from_directory
+from flask_cors import CORS
 
 # Initialize Flask app
 app = Flask(__name__)
+CORS(app)  # This will enable CORS for all routes, including static files
 app.secret_key = secrets.token_hex(16)
 app.config['SESSION_TYPE'] = 'filesystem'
 
@@ -34,3 +36,9 @@ app.register_blueprint(question_bp, url_prefix='/question')
 app.register_blueprint(game_bp, url_prefix='/game')
 app.register_blueprint(nav_bp)
 app.register_blueprint(data_access_bp)
+
+@app.route('/static/<path:filename>')
+def custom_static(filename):
+    response = send_from_directory('static', filename)
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response

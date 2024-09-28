@@ -15,7 +15,7 @@
     <div class="picturecontainer">
         {% if question.HasImage %}
             <div class="formcontainer">
-                <img src="{{ question.image_path.replace('\\', '/') }}" alt="Bild" class="question-image">
+                <img src="{{ question.image_path.replace('\\', '/') }}" alt="Bild" class="question-image" crossorigin="anonymous">
                 <!-- Kommentar: Fehlerbehebung für Bildpfad -->
             </div>
         {% endif %}
@@ -24,6 +24,8 @@
     <div id="answerContainer" style="visibility: hidden;">
         <h2>Antwort: {{ question.answer }}</h2>
     </div> 
+
+    <br>
 
     <!-- Updated Form with Correct Button ID -->
     <form id="next" action="{{ url_for('game.load_next_question_call') }}" method="POST">
