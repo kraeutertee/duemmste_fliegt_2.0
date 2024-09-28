@@ -89,7 +89,7 @@ def show_editor():
     return render_template('editor.html')
 
 def show_editor(editor_set):
-    session['editor_set'] = os.path.join(data_access.get_questions_folder(), editor_set)
+    session['editor_set'] = editor_set
     return render_template('editor.html')
 
 @nav_bp.route('/game_opt')

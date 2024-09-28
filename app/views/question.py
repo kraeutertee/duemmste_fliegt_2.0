@@ -11,8 +11,11 @@ question_bp = Blueprint('question', __name__)
 def create_editor_set():
     try:
         editor_set = request.form['editor_set']   
-        file_path = create_csv( editor_set)
+        file_path = create_csv(editor_set)
+
+        current_app.logger.info(f"Created editor set: {editor_set}. File path: {file_path}")
         
+        current_app.logger.info(f"Redirecting to editor set: {editor_set}")
         return nav.show_editor(file_path)
     except Exception as e:
         current_app.logger.error(f"Error creating editor set: {str(e)}")
@@ -40,12 +43,13 @@ def create_csv(file_name):
 def save_question():
     try:
         selected_question_set = session.get('editor_set')
+        current_app.logger.info(f"Selected question set: {selected_question_set}")
         question = request.form['question']
         answer = request.form['answer']
         image = request.files['image']
         HasImage = True
         username = session.get('username', 'default_user')
-        image_dir = os.path.join('static', 'images')
+        image_dir = os.path.join('app', 'static', 'images')
         if not os.path.exists(image_dir):
             os.makedirs(image_dir)
 
@@ -65,6 +69,7 @@ def save_question():
             HasImage = False
 
         try:
+            current_app.logger.info(f"Saving question '{question}' to {selected_question_set}.")
             with open(selected_question_set, 'a', newline='') as file:
                 writer = csv.writer(file)
                 writer.writerow([question, answer, image_path, HasImage])
@@ -72,12 +77,12 @@ def save_question():
         except Exception as e:
             current_app.logger.error(f"Error writing to CSV: {str(e)}")
             flash(f"Error writing to CSV: {str(e)}", "danger")
-            return redirect('/questionselect')
+            return redirect('/editor_select')
 
         flash("Question saved successfully!", "success")
-        return render_template('questioncreate.html')
+        return render_template('editor.html')
 
     except Exception as e:
         current_app.logger.error(f"Error saving question: {str(e)}")
         flash(f"Error saving question: {str(e)}", "danger")
-        return redirect('/questionselect')
+        return redirect('/editor_select')
