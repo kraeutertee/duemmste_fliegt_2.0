@@ -7,12 +7,16 @@
     <title>Document</title>
 </head>
 <body>
+    <!-- Timer Display -->
+    <div id="timer">Time: {{ timer }}</div>
+
     <h2>Frage: {{ question.question }}</h2>
 
     <div class="picturecontainer">
         {% if question.HasImage %}
             <div class="formcontainer">
-                <img src="{{ question.image_path.replace('\\', '/') }}" alt="Bild" class="question-image"> <!-- wenn ERROR: Error during loading the next question call: 'numpy.float64 object' has no attribute 'replace', wird False in der CSV als String erkannt, weil ein Leerzeichen davor ist-->
+                <img src="{{ question.image_path.replace('\\', '/') }}" alt="Bild" class="question-image" crossorigin="anonymous">
+                <!-- Kommentar: Fehlerbehebung für Bildpfad -->
             </div>
         {% endif %}
     </div>
@@ -21,10 +25,15 @@
         <h2>Antwort: {{ question.answer }}</h2>
     </div> 
 
+    <br>
+
+    <!-- Updated Form with Correct Button ID -->
     <form id="next" action="{{ url_for('game.load_next_question_call') }}" method="POST">
+        <input type="hidden" id="remainingTime" name="remaining_time" value="{{ timer }}">
         <div class="container">
-            <div class="btn" id="blue" onclick="revealAnswer()"><a href="#">show answer</a></div> 
-            <div class="btn" id="green" onclick="submitnextForm()"><a href="#">next question</a></div>
+            <div class="btn" id="blue" onclick="revealAnswer()"><a href="javascript:void(0);">show answer</a></div> 
+            <!-- Updated ID to 'green' and initial state based on timer -->
+            <div class="btn disabled" id="green" onclick="submitNextForm()"><a href="javascript:void(0);">next question</a></div>
             <div class="btn" id="red"><a href="/menu">back to menu</a></div>
         </div>
     </form>
@@ -48,34 +57,90 @@
     {% endif %}
 
     <script>
+        // Initialize timer from the server-side variable
+        let timer = {{ timer }};
+        const timerElement = document.getElementById('timer');
+        const nextButton = document.getElementById('green'); // Corrected ID
+
+        // Function to update the timer display and button state
+        function updateTimer() {
+            timerElement.textContent = `Time: ${timer}`;
+            if (timer > 0) {
+                // Enable the "Next Question" button
+                nextButton.classList.remove('disabled');
+                nextButton.style.pointerEvents = 'auto';
+                nextButton.style.opacity = '1';
+            } else {
+                // Disable the "Next Question" button
+                nextButton.classList.add('disabled');
+                nextButton.style.pointerEvents = 'none';
+                nextButton.style.opacity = '0.6';
+            }
+        }
+
+        // Initial timer update
+        updateTimer();
+
+        // Start the countdown timer
+        const countdown = setInterval(() => {
+            if (timer > 0) {
+                timer--;
+                updateTimer();
+            } else {
+                clearInterval(countdown);
+            }
+        }, 1000);
+
+        // Function to reveal the answer
         function revealAnswer() {
             document.getElementById('answerContainer').style.visibility = 'visible';
         }
 
-        function submitnextForm() {
+        // Function to submit the next form
+        function submitNextForm() {
+            // Only submit if the button is enabled
+            // Update the hidden field with the current remaining time
+            document.getElementById('remainingTime').value = timer;
             document.getElementById("next").submit();
+
         }
 
+        // Function to handle heart removal
         function removeHeart(element) {
-        const playerIndex = element.getAttribute('data-index');
-        const heartIndex = element.getAttribute('data-heart-index');
+            const playerIndex = element.getAttribute('data-index');
+            const heartIndex = element.getAttribute('data-heart-index');
 
-        fetch(`/player/remove_heart/${playerIndex}`, {
-            method: 'POST'
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Update the UI to reflect the removed heart
-                element.style.display = 'none';
+            fetch(`/player/remove_heart/${playerIndex}`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the UI to reflect the removed heart
+                    element.style.display = 'none';
 
-                // Check if the player's lives are now 0
-                if (data.player.lives === 0) {
-                    // Reveal the skull for this player
-                    document.getElementById(`skull${playerIndex}`).style.display = 'inline';
+                    // Check if the player's lives are now 0
+                    if (data.player.lives === 0) {
+                        // Reveal the skull for this player
+                        document.getElementById(`skull${playerIndex}`).style.display = 'inline';
+                    }
+
+                    // Enable the "Next Question" button
+                    nextButton.classList.remove('disabled');
+                    nextButton.style.pointerEvents = 'auto';
+                    nextButton.style.opacity = '1';
+
+                    // Optionally, stop the timer if it's still running
+                    if (timer > 0) {
+                        clearInterval(countdown);
+                        timer = 0;
+                        updateTimer();
+                    }
                 }
-            }
-        });
+            })
+            .catch(error => {
+                console.error('Error removing heart:', error);
+            });
         }
     </script>
 </body>

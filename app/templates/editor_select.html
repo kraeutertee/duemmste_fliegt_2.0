@@ -11,10 +11,10 @@
         <div class="formcontainer">
             <div class="form">
                 <h2>Select a Question-set</h2>
-                <form id="select" action="/select_question_set" method="post">
+                <form id="select" action="{{ url_for('nav.show_editor') }}" method="post">
                     <div class="inputBox">
-                        <select id="username" name="selected_question_set">
-                            {% for file in userfiles %}
+                        <select id="username" name="editor_set">
+                            {% for file in files %}
                             <option value="{{ file }}">{{ file }}</option>
                             {% endfor %}
                         </select>
@@ -32,9 +32,9 @@
         <div class="formcontainer" style="display: none;">
             <div class="form">
                 <h2>Create a Question-set</h2>
-                <form id="create" action="/create_question_set" method="post">
+                <form id="create" action="{{ url_for('question.create_editor_set') }}" method="post">
                     <div class="inputBox">
-                        <input type="text" id="file_name" name="file_name" placeholder="Question-set name">
+                        <input type="text" id="editor_set" name="editor_set" placeholder="Question-set name">
                     </div>
 
                     <div class="container"> 

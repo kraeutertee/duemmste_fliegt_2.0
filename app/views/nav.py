@@ -33,6 +33,7 @@ def login():
         session['final_mode_active'] = False
         session['final_mode_init'] = False # zukünftig auf False setzen, wenn Sieger bestimmt wird
         session['players'] = []
+        session['timer_default'] = 30
 
         return redirect('/menu')
 
@@ -81,6 +82,15 @@ def show_editor_select():
         current_app.logger.error(f"Error loading editor_select: {str(e)}")
         flash(f"Error rendering editor_select page: {str(e)}", "danger")
         return redirect('/')
+    
+@nav_bp.route('/editor', methods=['POST'])
+def show_editor():
+    session['editor_set'] = os.path.join(data_access.get_questions_folder(), request.form['editor_set'])
+    return render_template('editor.html')
+
+def show_editor(editor_set):
+    session['editor_set'] = editor_set
+    return render_template('editor.html')
 
 @nav_bp.route('/game_opt')
 def show_game_opt():
@@ -104,7 +114,7 @@ def show_game():
         current_app.logger.info(f"Question set '{session.get('game_set')}' loaded for user: {session.get('username')}")
         
         # Attempt to render the game page
-        return render_template('game.html', question = game.load_next_question(), players = session.get('players', []), current_player_index = session.get('current_player_index', 0))
+        return render_template('game.html', question = game.load_next_question(), players = session.get('players', []), current_player_index = session.get('current_player_index', 0), timer = 30)
     except Exception as e:
         # Log the error and notify the user
         current_app.logger.error(f"Error loading show_game: {str(e)}")
@@ -121,3 +131,8 @@ def show_player():
         current_app.logger.error(f"Error loading player page: {str(e)}")
         flash(f"Error loading player page: {str(e)}", "danger")
         return redirect('/menu')
+    
+@nav_bp.route('/winner/<string:player_name>', methods=['GET', 'POST'])
+def winner(player_name):
+    current_app.logger.info(f"Winner page accessed for player: {player_name}")
+    return render_template('winner.html', player=player_name)

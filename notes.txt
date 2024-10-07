@@ -2,4 +2,8 @@ Implementierung dass wenn im finalmodus (final_mode_active) True, keine Herzen m
 
 bereinigen von unnötigen debugging loggern in game.load_next_question
 
-man könntre überlegen ob man eine Statistik einführt wer wieviele Games gewonnen hat, leben plotten über die Zeit, bisschen Datenanalyse betreiben
+man könnte überlegen ob man eine Statistik einführt wer wieviele Games gewonnen hat, leben plotten über die Zeit, bisschen Datenanalyse betreiben
+
+player über lange Zeit in csv Speichern wenn der user die App verlässt und dadurch später wieder laden können, wenn session eigentlich schon geschlossen wurde und damit die liste players verloren gegangen ist
+
+wenn jemals online, dann alle player die möglichkeit mit emojies zu regieren so wie in Insta livestreams, https://codepen.io/anastasiaschmidt/pen/MWxLRVp
